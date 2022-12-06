@@ -8,6 +8,7 @@
 import Foundation
 import AuthenticationServices
 import OSLog
+import SwiftUI
 
 class CredentialCreationPublicKey : Codable {
   var challenge: String
@@ -30,6 +31,9 @@ class CredentialCreationUser : Codable {
 
 class CredentialCreationAuthenticatorSelection : Codable {
   var userVerification: String?
+  var authenticatorAttachment: String?
+  var residentKey: String?
+  var requireResidentKey: Bool?
 }
 
 class CredentialAssertionPublicKey : Codable {
@@ -64,7 +68,7 @@ extension Decodable {
   }
 }
 
-class RCTPromiseResoveReject: NSObject {
+class RCTPromiseResolveReject: NSObject {
   let resolve : RCTPromiseResolveBlock
   let reject: RCTPromiseRejectBlock
   init(resolve:@escaping RCTPromiseResolveBlock, reject:@escaping RCTPromiseRejectBlock){
@@ -73,12 +77,36 @@ class RCTPromiseResoveReject: NSObject {
   }
 }
 
+@available(iOS 15.0, *)
+struct FullScreenModalView: View {
+    var approveHandler: () -> Void
+    var dismissHandler: () -> Void
+    var modalContent: String
+    @Environment(\.dismiss) var dismiss
+
+    var body: some View {
+        VStack {
+            Text(modalContent)
+            HStack{
+                Button("Cancel", role: .cancel) {
+                    dismissHandler()
+                    dismiss()
+                }
+                Button("Approve"){
+                    approveHandler()
+                    dismiss()
+                }
+            }
+        }
+    }
+}
+
 @available(iOS 16.0, *)
 @objc(AmwalAuthReactNative)
 class AmwalAuthReactNative: NSObject, ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
   
   var authenticationAnchor: ASPresentationAnchor?
-  var promises: [ASAuthorizationController:RCTPromiseResoveReject] = [:]
+  var promises: [ASAuthorizationController:RCTPromiseResolveReject] = [:]
   
   @objc static func requiresMainQueueSetup() -> Bool { return true }
   
@@ -109,7 +137,7 @@ class AmwalAuthReactNative: NSObject, ASAuthorizationControllerPresentationConte
           registrationRequest.userVerificationPreference = ASAuthorizationPublicKeyCredentialUserVerificationPreference.init(rawValue: userVerification)
         }
         let authController = ASAuthorizationController(authorizationRequests: [ registrationRequest ] )
-        promises[authController] = RCTPromiseResoveReject(resolve: resolve, reject: reject);
+        promises[authController] = RCTPromiseResolveReject(resolve: resolve, reject: reject);
         authController.delegate = self
         authController.presentationContextProvider = self
         authController.performRequests()
@@ -134,9 +162,9 @@ class AmwalAuthReactNative: NSObject, ASAuthorizationControllerPresentationConte
         
         if let userVerification = assertionRequestOptions.userVerification {
           assertionRequest.userVerificationPreference = ASAuthorizationPublicKeyCredentialUserVerificationPreference.init(rawValue: userVerification)
-        }        
+        }
         let authController = ASAuthorizationController(authorizationRequests: [ assertionRequest ] )
-        promises[authController] = RCTPromiseResoveReject(resolve: resolve, reject: reject);
+        promises[authController] = RCTPromiseResolveReject(resolve: resolve, reject: reject);
         authController.delegate = self
         authController.presentationContextProvider = self
         if (autoFill) {
@@ -147,6 +175,26 @@ class AmwalAuthReactNative: NSObject, ASAuthorizationControllerPresentationConte
       } catch {
         reject("AmwalAuth",error.localizedDescription, error)
       }
+  }
+
+  @objc public func presentAuthenticationModal(_
+    requestOptionsJSON: NSDictionary,
+    modalContent: String,
+    resolve:@escaping RCTPromiseResolveBlock,
+    reject:@escaping RCTPromiseRejectBlock) {
+    DispatchQueue.main.async{
+      RCTPresentedViewController()?
+        .present(
+          UIHostingController( rootView: FullScreenModalView(
+            approveHandler: { [self] in
+                startAuthentication(requestOptionsJSON, autoFill: false, resolve: resolve, reject: reject)
+            },
+            dismissHandler: {
+              reject("AmwalAuth", "Modal Dismissed", NSError(domain: "AmwalAuth", code: -5))
+            },
+            modalContent: modalContent)),
+          animated: true)
+    }
   }
   
   func authorizationController(

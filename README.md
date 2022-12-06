@@ -2,10 +2,15 @@
 
 react native package for Amwal Auth
 
+# Building
+```sh
+yarn prepare
+```
+
 ## Installation
 
 ```sh
-npm install amwal-auth-react-native
+yarn add ../amwal-auth-react-native
 ```
 
 ## Usage
@@ -17,15 +22,3 @@ import { multiply } from 'amwal-auth-react-native';
 
 const result = await multiply(3, 7);
 ```
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
-
-## License
-
-MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)

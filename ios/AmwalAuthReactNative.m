@@ -14,4 +14,11 @@ RCT_EXTERN_METHOD(
   reject: (RCTPromiseRejectBlock) reject
 )
 
+RCT_EXTERN_METHOD(
+  presentAuthenticationModal: (NSDictionary *) requestOptionsJSON
+  modalContent: (NSString *) modalContent
+  resolve: (RCTPromiseResolveBlock) resolve
+  reject: (RCTPromiseRejectBlock) reject
+)
+
 @end

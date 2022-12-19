@@ -21,4 +21,9 @@ RCT_EXTERN_METHOD(
   reject: (RCTPromiseRejectBlock) reject
 )
 
+RCT_EXTERN_METHOD(
+  registerNotification: (RCTPromiseResolveBlock) resolve
+  reject: (RCTPromiseRejectBlock) reject
+)
+
 @end

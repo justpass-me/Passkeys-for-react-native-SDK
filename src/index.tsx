@@ -98,3 +98,5 @@ export const presentAuthenticationModal = isAvailable
       ) as Promise<AuthenticationCredentialJSON>;
     }
   : undefined;
+
+export const registerNotification = AmwalAuthReactNative.registerNotification;

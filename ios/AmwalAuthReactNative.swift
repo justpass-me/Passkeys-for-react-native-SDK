@@ -111,15 +111,19 @@ enum SwizzlingState {
 
 @available(iOS 16.0, *)
 @objc(AmwalAuthReactNative)
-class AmwalAuthReactNative: NSObject, ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate {
+class AmwalAuthReactNative: RCTEventEmitter, ASAuthorizationControllerPresentationContextProviding, ASAuthorizationControllerDelegate  {
   
   var authenticationAnchor: ASPresentationAnchor?
   var promises: [ASAuthorizationController:RCTPromiseResolveReject] = [:]
   
-  @objc static func requiresMainQueueSetup() -> Bool { return true }
+  @objc override static func requiresMainQueueSetup() -> Bool { return true }
   
-  @objc public func constantsToExport() -> NSDictionary {
+  @objc public override func constantsToExport() -> [AnyHashable : Any] {
     return ["isAvailable": true];
+  }
+
+  @objc override func supportedEvents() -> [String]! {
+      return ["AmwalAuthNotificationEvent"]
   }
   
   func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
@@ -186,20 +190,39 @@ class AmwalAuthReactNative: NSObject, ASAuthorizationControllerPresentationConte
   }
 
   static var registerNotificationResolveReject : RCTPromiseResolveReject? = nil
+  static var remoteNotificationEventEmitter : RCTEventEmitter? = nil
+  static var remoteNotificationCallback: RCTResponseSenderBlock? = nil
 
   @objc public func registerNotification(_
     resolve:@escaping RCTPromiseResolveBlock,
     reject:@escaping RCTPromiseRejectBlock){
-      DispatchQueue.main.async{
-        if case .uninitialized = AmwalAuthReactNative.successSwizzleState {
-          self.swizzleDidReceiveRemoteNotification();
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+      if let error = error {
+        // Handle the error here.
+        reject("AmwalAuth",error.localizedDescription, error);
+      } else {
+        // Enable or disable features based on the authorization.
+        DispatchQueue.main.async{
+          if case .uninitialized = AmwalAuthReactNative.successSwizzleState {
+            self.swizzleDidRegisterForRemoteNotification();
+          }
+          if case .uninitialized = AmwalAuthReactNative.failureSwizzleState {
+            self.swizzleDidFailToRegisterForRemoteNotification();
+          }
+          if case .uninitialized = AmwalAuthReactNative.handlerSwizzleState {
+            self.swizzleDidReceiveRemoteNotification();
+          }
+          UIApplication.shared.registerForRemoteNotifications();
+          AmwalAuthReactNative.registerNotificationResolveReject = RCTPromiseResolveReject(resolve: resolve, reject: reject);
+          AmwalAuthReactNative.remoteNotificationEventEmitter = self;
         }
-        if case .uninitialized = AmwalAuthReactNative.failureSwizzleState {
-          self.swizzleDidFailToRegisterForRemoteNotification();
-        }
-        UIApplication.shared.registerForRemoteNotifications();
-        AmwalAuthReactNative.registerNotificationResolveReject = RCTPromiseResolveReject(resolve: resolve, reject: reject);
       }
+    }
+  }
+
+  @objc public func setNotificationMessageCallback(_
+    callback: @escaping RCTResponseSenderBlock) {
+    AmwalAuthReactNative.remoteNotificationCallback = callback;
   }
 
   @objc dynamic class func application(
@@ -222,9 +245,22 @@ class AmwalAuthReactNative: NSObject, ASAuthorizationControllerPresentationConte
     AmwalAuthReactNative.registerNotificationResolveReject?.reject("AmwalAuth", error.localizedDescription, error)
   }
 
+  @objc dynamic class func application(
+    _ app: UIApplication,
+    didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+    fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+  ) {
+    if case .swizzled = AmwalAuthReactNative.handlerSwizzleState {
+      AmwalAuthReactNative.application(app, didReceiveRemoteNotification: userInfo, fetchCompletionHandler: completionHandler);
+    }
+    AmwalAuthReactNative.remoteNotificationEventEmitter?.sendEvent(withName: "AmwalAuthNotificationEvent", body: userInfo);
+    AmwalAuthReactNative.remoteNotificationCallback?([userInfo]);
+    AmwalAuthReactNative.remoteNotificationCallback = nil;
+  }
+
   static var successSwizzleState = SwizzlingState.uninitialized;
 
-  private func swizzleDidReceiveRemoteNotification() {
+  private func swizzleDidRegisterForRemoteNotification() {
     let appDelegate = UIApplication.shared.delegate
     let appDelegateClass = type(of: appDelegate!)
 
@@ -262,6 +298,28 @@ class AmwalAuthReactNative: NSObject, ASAuthorizationControllerPresentationConte
     } else {
       // add implementation
       AmwalAuthReactNative.failureSwizzleState = .added;
+      class_addMethod(appDelegateClass, swizzledSelector, method_getImplementation(swizzledMethod!), method_getTypeEncoding(swizzledMethod!))
+    }
+  }
+
+  static var handlerSwizzleState = SwizzlingState.uninitialized;
+
+  private func swizzleDidReceiveRemoteNotification() {
+    let appDelegate = UIApplication.shared.delegate
+    let appDelegateClass = type(of: appDelegate!)
+
+    let originalSelector = #selector(UIApplicationDelegate.application(_:didReceiveRemoteNotification:fetchCompletionHandler:))
+    let swizzledSelector = #selector(AmwalAuthReactNative.application(_:didReceiveRemoteNotification:fetchCompletionHandler:))
+
+    let swizzledMethod = class_getClassMethod(type(of: self), swizzledSelector)
+
+    if let originalMethod = class_getInstanceMethod(appDelegateClass, originalSelector)  {
+      // exchange implementation
+      AmwalAuthReactNative.handlerSwizzleState = .swizzled;
+      method_exchangeImplementations(originalMethod, swizzledMethod!)
+    } else {
+      // add implementation
+      AmwalAuthReactNative.handlerSwizzleState = .added;
       class_addMethod(appDelegateClass, swizzledSelector, method_getImplementation(swizzledMethod!), method_getTypeEncoding(swizzledMethod!))
     }
   }

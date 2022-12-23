@@ -1,4 +1,4 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
 const LINKING_ERROR =
   `The package 'amwal-auth-react-native' doesn't seem to be linked. Make sure: \n\n` +
@@ -16,6 +16,8 @@ const AmwalAuthReactNative = NativeModules.AmwalAuthReactNative
         },
       }
     );
+
+const AmwalNativeEventEmitter = new NativeEventEmitter(AmwalAuthReactNative);
 
 export interface CredentialCreationPublicKey {
   challenge: string;
@@ -99,4 +101,26 @@ export const presentAuthenticationModal = isAvailable
     }
   : undefined;
 
-export const registerNotification = AmwalAuthReactNative.registerNotification;
+export const registerNotification: () => Promise<string> =
+  AmwalAuthReactNative.registerNotification;
+
+export const onNotificationMessage = (callback: (message: any) => void) => {
+  let unsubscribe = false;
+  const repeatCallback = () => {
+    AmwalAuthReactNative.setNotificationMessageCallback((message: any) => {
+      if (!unsubscribe) {
+        callback(message);
+        repeatCallback();
+      }
+    });
+  };
+  repeatCallback();
+  const subscription = AmwalNativeEventEmitter.addListener(
+    'AmwalAuthNotificationEvent',
+    callback
+  );
+  return () => {
+    subscription.remove();
+    unsubscribe = true;
+  };
+};

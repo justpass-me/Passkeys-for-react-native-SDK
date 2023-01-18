@@ -67,7 +67,7 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
               map.putString("rawId", rawId)
               map.putString("type", "public-key")
               val responseMap = Arguments.createMap()
-              //responseMap.putString("attestationObject", response.attestationObject.toBase64())
+              responseMap.putString("attestationObject", response.attestationObject.toBase64())
               responseMap.putString(
                 "authenticatorData", assertionResponse.authenticatorData.toBase64()
               )
@@ -110,7 +110,6 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
               map.putString("rawId", rawId)
               map.putString("type", "public-key")
               val responseMap = Arguments.createMap()
-              //responseMap.putString("attestationObject", response.attestationObject.toBase64())
               responseMap.putString("clientDataJSON", response.clientDataJSON.toBase64())
               map.putMap("response", responseMap)
               Log.v("WebAuthn", map.toString())

@@ -18,6 +18,7 @@ import com.google.android.gms.fido.fido2.Fido2ApiClient
 import com.google.android.gms.fido.fido2.api.common.Attachment
 import com.google.android.gms.fido.fido2.api.common.AuthenticationExtensions
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
+import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorErrorResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorSelectionCriteria
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredential
@@ -56,31 +57,32 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
         } else {
           try {
             val credential = PublicKeyCredential.deserializeFromBytes(bytes)
-            val response = credential.getResponse()
+            val response = credential.response
+            val assertionResponse = credential.response as AuthenticatorAssertionResponse
             if (response is AuthenticatorErrorResponse) {
               promise?.reject(null, response.errorMessage)
             } else {
-              val assertionResponse = response as AuthenticatorAssertionResponse
               val map = Arguments.createMap()
               val rawId = credential.rawId.toBase64()
               map.putString("id", rawId)
               map.putString("rawId", rawId)
               map.putString("type", "public-key")
               val responseMap = Arguments.createMap()
-              responseMap.putString("attestationObject", response.attestationObject.toBase64())
               responseMap.putString(
                 "authenticatorData", assertionResponse.authenticatorData.toBase64()
               )
               responseMap.putString("signature", assertionResponse.signature.toBase64())
               responseMap.putString("userHandle", assertionResponse.userHandle?.toBase64())
-              responseMap.putString("clientDataJSON", response.clientDataJSON.toBase64())
+              responseMap.putString("clientDataJSON", assertionResponse.clientDataJSON.toBase64())
               map.putMap("response", responseMap)
               Log.v("WebAuthn", map.toString())
               Toast.makeText(activity, "Success Auth with Webauthn $map", Toast.LENGTH_LONG).show()
               promise?.resolve(map)
             }
           } catch (e: Exception) {
+            Toast.makeText(activity, "Error $e", Toast.LENGTH_LONG).show()
             promise?.reject(null, e);
+
           }
         }
       }
@@ -100,10 +102,11 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
         } else {
           try {
             val credential = PublicKeyCredential.deserializeFromBytes(bytes)
-            val response = credential.getResponse()
+            val response = credential.response
             if (response is AuthenticatorErrorResponse) {
               promise?.reject(null, response.errorMessage)
             } else {
+              val attestationResponse = credential.response as AuthenticatorAttestationResponse
               val map = Arguments.createMap()
               val rawId = credential.rawId.toBase64()
               map.putString("id", rawId)
@@ -111,12 +114,17 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
               map.putString("type", "public-key")
               val responseMap = Arguments.createMap()
               responseMap.putString("clientDataJSON", response.clientDataJSON.toBase64())
+              responseMap.putString(
+                "attestationObject",
+                attestationResponse.attestationObject.toBase64()
+              )
               map.putMap("response", responseMap)
               Log.v("WebAuthn", map.toString())
               Toast.makeText(activity, "Success Auth with Webauthn $map", Toast.LENGTH_LONG).show()
               promise?.resolve(map)
             }
           } catch (e: Exception) {
+            Toast.makeText(activity, "Error $e", Toast.LENGTH_LONG).show()
             promise?.reject(null, e);
           }
         }
@@ -141,19 +149,20 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
   )
 
   private fun parseCreationOptions(creationOptionsJSON: ReadableMap): PublicKeyCredentialCreationOptions {
+    println("PassKey Map:  $creationOptionsJSON")
     val builder = PublicKeyCredentialCreationOptions.Builder()
     builder.setChallenge(creationOptionsJSON.getString("challenge")!!.decodeBase64())
     val user = creationOptionsJSON.getMap("user")
     builder.setUser(
       PublicKeyCredentialUserEntity(
         user?.getString("id")?.decodeBase64()!!, user.getString("name")!!, null.toString(), // icon
-        user?.getString("displayName") ?: ""
+        user.getString("displayName") ?: ""
       )
     )
     val rp = creationOptionsJSON.getMap("rp")
     builder.setRp(
       PublicKeyCredentialRpEntity(
-        rp?.getString("id")!!, rp?.getString("name")!!,/* icon */ null
+        rp?.getString("id")!!, rp.getString("name")!!,/* icon */ null
       )
     )
     val pubKeyCredParams = creationOptionsJSON.getArray("pubKeyCredParams")?.toArrayList()
@@ -173,7 +182,9 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
     val authenticatorSelection = creationOptionsJSON.getMap("authenticatorSelection")
     if (authenticatorSelection != null) {
       val selectionBuilder = AuthenticatorSelectionCriteria.Builder()
-      selectionBuilder.setAttachment(Attachment.fromString(authenticatorSelection.getString("authenticatorAttachment")!!))
+      selectionBuilder.setAttachment(
+        Attachment.fromString(authenticatorSelection.getString("authenticatorAttachment")!!)
+      )
       selectionBuilder.setResidentKeyRequirement(
         ResidentKeyRequirement.fromString(
           authenticatorSelection.getString("residentKey")!!

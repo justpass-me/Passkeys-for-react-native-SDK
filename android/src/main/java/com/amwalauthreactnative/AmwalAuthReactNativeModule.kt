@@ -82,7 +82,6 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
           } catch (e: Exception) {
             Toast.makeText(activity, "Error $e", Toast.LENGTH_LONG).show()
             promise?.reject(null, e);
-
           }
         }
       }

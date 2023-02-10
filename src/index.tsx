@@ -1,3 +1,5 @@
+import type { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
 const LINKING_ERROR =
@@ -124,3 +126,81 @@ export const onNotificationMessage = (callback: (message: any) => void) => {
     unsubscribe = true;
   };
 };
+
+export class AmwalAuthClient {
+  private authServiceURL: string;
+  private apiClient: AxiosInstance;
+
+  constructor(clientURL: string, authServiceURL: string) {
+    this.authServiceURL = authServiceURL;
+    this.apiClient = axios.create({
+      baseURL: clientURL,
+      withCredentials: true,
+    });
+  }
+
+  async register() {
+    const startRegistrationResponse = await this.apiClient.get(
+      '/oidc/authenticate/',
+      {
+        headers: {
+          'AMWAL-PLATFORM': 'app',
+        },
+      }
+    );
+    const { publicKey } = startRegistrationResponse.data;
+    if (startRegistration && publicKey) {
+      const registrationCredential = await startRegistration(publicKey);
+      const registrationResponse = await this.apiClient.post(
+        this.authServiceURL + '/fido2/reg_complete/',
+        registrationCredential
+      );
+      if (registrationResponse.data.status === 'ERR') {
+        throw new Error(registrationResponse.data.message);
+      }
+      const backReponse = await this.apiClient.get(
+        this.authServiceURL + '/back_to_client/',
+        {
+          headers: {
+            'AMWAL-PLATFORM': 'app',
+          },
+        }
+      );
+      return backReponse.data;
+    } else {
+      throw new Error('No publicKey found');
+    }
+  }
+
+  async authenticate() {
+    const startAuthResponse = await this.apiClient.get('/oidc/authenticate/', {
+      headers: {
+        'AMWAL-PLATFORM': 'app',
+      },
+    });
+    const { publicKey } = startAuthResponse.data;
+    if (startAuthentication && publicKey) {
+      const authCredential = await startAuthentication(publicKey, false);
+      const authResponse = await this.apiClient.post(
+        this.authServiceURL + '/fido2/complete_auth/',
+        authCredential
+      );
+      console.log('authResponse.data', authResponse.data);
+      if (authResponse.data.status === 'OK') {
+        const bankResp = await this.apiClient.get(
+          this.authServiceURL + '/back_to_client/',
+          {
+            headers: {
+              'AMWAL-PLATFORM': 'app',
+            },
+          }
+        );
+        return bankResp.data;
+      } else {
+        throw new Error(authResponse.data.message);
+      }
+    } else {
+      throw new Error('No publicKey found');
+    }
+  }
+}

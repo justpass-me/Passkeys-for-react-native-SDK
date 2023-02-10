@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E555C0D2413F4C50049A1A2 /* AmwalAuthReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* AmwalAuthReactNative.m */; };
-		F4FF95D7245B92E800C19C63 /*  AmwalAuthReactNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /*  AmwalAuthReactNative.swift */; };
+		F4FF95D7245B92E800C19C63 /* AmwalAuthReactNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* AmwalAuthReactNative.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libAmwalAuthReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAmwalAuthReactNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		65BAD5412996C50100E5D17E /* PasskeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyManager.swift; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* AmwalAuthReactNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmwalAuthReactNative.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* AmwalAuthReactNative-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AmwalAuthReactNative-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* AmwalAuthReactNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmwalAuthReactNative.swift; sourceTree = "<group>"; };
@@ -52,6 +52,7 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				65BAD5412996C50100E5D17E /* PasskeyManager.swift */,
 				F4FF95D6245B92E800C19C63 /* AmwalAuthReactNative.swift */,
 				B3E7B5891CC2AC0600A0062D /* AmwalAuthReactNative.m */,
 				F4FF95D5245B92E700C19C63 /* AmwalAuthReactNative-Bridging-Header.h */,
@@ -117,7 +118,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4FF95D7245B92E800C19C63 /* AmwalAuthReactNative.swift in Sources */,
-				B3E7B58A1CC2AC0600A0062D /* AmwalAuthReactNative.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

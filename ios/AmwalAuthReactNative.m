@@ -3,31 +3,17 @@
 @interface RCT_EXTERN_MODULE(AmwalAuthReactNative, NSObject)
 
 RCT_EXTERN_METHOD(
-  startRegistration: (NSDictionary *) creationOptionsJSON
+  startRegistration: (NSString *) clientURL
+  authServiceURL: (NSString *) authServiceURL
   resolve: (RCTPromiseResolveBlock) resolve
   reject: (RCTPromiseRejectBlock) reject
 )
 RCT_EXTERN_METHOD(
-  startAuthentication: (NSDictionary *) requestOptionsJSON
+  startAuthentication: (NSString *) clientURL
+  authServiceURL: (NSString *) authServiceURL
   autoFill: (BOOL) autoFill
   resolve: (RCTPromiseResolveBlock) resolve
   reject: (RCTPromiseRejectBlock) reject
-)
-
-RCT_EXTERN_METHOD(
-  presentAuthenticationModal: (NSDictionary *) requestOptionsJSON
-  modalContent: (NSString *) modalContent
-  resolve: (RCTPromiseResolveBlock) resolve
-  reject: (RCTPromiseRejectBlock) reject
-)
-
-RCT_EXTERN_METHOD(
-  registerNotification: (RCTPromiseResolveBlock) resolve
-  reject: (RCTPromiseRejectBlock) reject
-)
-
-RCT_EXTERN_METHOD(
-  setNotificationMessageCallback: (RCTResponseSenderBlock) callback
 )
 
 @end

@@ -16,6 +16,8 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
+  s.vendored_frameworks = 'ios/AmwalAuthFramework.xcframework'
+
   s.dependency "React-Core"
 
   # Don't install the dependencies when we run `pod install` in the old architecture.

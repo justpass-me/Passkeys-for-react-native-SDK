@@ -1,0 +1,11 @@
+framework module AmwalAuthFramework {
+  umbrella header "AmwalAuthFramework.h"
+
+  export *
+  module * { export * }
+}
+
+module AmwalAuthFramework.Swift {
+  header "AmwalAuthFramework-Swift.h"
+  requires objc
+}

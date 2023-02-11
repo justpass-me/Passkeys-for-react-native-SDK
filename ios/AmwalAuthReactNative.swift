@@ -7,6 +7,7 @@
 
 import Foundation
 import AuthenticationServices
+import AmwalAuthFramework
 
 @available(iOS 16.0, *)
 @objc(AmwalAuthReactNative)

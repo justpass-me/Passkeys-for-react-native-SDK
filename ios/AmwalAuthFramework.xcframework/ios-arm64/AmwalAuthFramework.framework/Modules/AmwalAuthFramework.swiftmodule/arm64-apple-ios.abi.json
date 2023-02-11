@@ -1,0 +1,243 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Combine",
+        "printedName": "Combine",
+        "declKind": "Import",
+        "moduleName": "AmwalAuthFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "AuthenticationServices",
+        "printedName": "AuthenticationServices",
+        "declKind": "Import",
+        "moduleName": "AmwalAuthFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "AuthenticationServices",
+        "printedName": "AuthenticationServices",
+        "declKind": "Import",
+        "moduleName": "AmwalAuthFramework"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "AmwalAuthClient",
+        "printedName": "AmwalAuthClient",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(clientURL:authServiceURL:presentationAnchor:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "AmwalAuthClient",
+                "printedName": "AmwalAuthFramework.AmwalAuthClient",
+                "usr": "c:@M@AmwalAuthFramework@objc(cs)AmwalAuthClient"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIWindow",
+                "printedName": "UIKit.UIWindow",
+                "usr": "c:objc(cs)UIWindow"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@AmwalAuthFramework@objc(cs)AmwalAuthClient(im)initWithClientURL:authServiceURL:presentationAnchor:",
+            "mangledName": "$s18AmwalAuthFramework0aB6ClientC9clientURL011authServiceF018presentationAnchorACSS_SSSo8UIWindowCtcfc",
+            "moduleName": "AmwalAuthFramework",
+            "objc_name": "initWithClientURL:authServiceURL:presentationAnchor:",
+            "declAttributes": [
+              "AccessControl",
+              "ObjC"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "register",
+            "printedName": "register()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "NSDictionary",
+                "printedName": "Foundation.NSDictionary",
+                "usr": "c:objc(cs)NSDictionary"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AmwalAuthFramework@objc(cs)AmwalAuthClient(im)registerWithCompletionHandler:",
+            "mangledName": "$s18AmwalAuthFramework0aB6ClientC8registerSo12NSDictionaryCyYaKF",
+            "moduleName": "AmwalAuthFramework",
+            "objc_name": "registerWithCompletionHandler:",
+            "declAttributes": [
+              "Final",
+              "AccessControl",
+              "ObjC"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "authenticate",
+            "printedName": "authenticate(autoFill:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "NSDictionary",
+                "printedName": "Foundation.NSDictionary",
+                "usr": "c:objc(cs)NSDictionary"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AmwalAuthFramework@objc(cs)AmwalAuthClient(im)authenticateWithAutoFill:completionHandler:",
+            "mangledName": "$s18AmwalAuthFramework0aB6ClientC12authenticate8autoFillSo12NSDictionaryCSb_tYaKF",
+            "moduleName": "AmwalAuthFramework",
+            "objc_name": "authenticateWithAutoFill:completionHandler:",
+            "declAttributes": [
+              "Final",
+              "AccessControl",
+              "ObjC"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "AmwalAuthClient",
+                "printedName": "AmwalAuthFramework.AmwalAuthClient",
+                "usr": "c:@M@AmwalAuthFramework@objc(cs)AmwalAuthClient"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@AmwalAuthFramework@objc(cs)AmwalAuthClient(im)init",
+            "mangledName": "$s18AmwalAuthFramework0aB6ClientCACycfc",
+            "moduleName": "AmwalAuthFramework",
+            "overriding": true,
+            "implicit": true,
+            "objc_name": "init",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Override"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "c:@M@AmwalAuthFramework@objc(cs)AmwalAuthClient",
+        "mangledName": "$s18AmwalAuthFramework0aB6ClientC",
+        "moduleName": "AmwalAuthFramework",
+        "intro_iOS": "16.0",
+        "declAttributes": [
+          "AccessControl",
+          "Final",
+          "Available",
+          "ObjC"
+        ],
+        "superclassUsr": "c:objc(cs)NSObject",
+        "superclassNames": [
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/samehgalal\/Developer\/amwal-auth-ios\/AmwalAuthFramework\/PasskeyManager.swift",
+      "kind": "StringLiteral",
+      "offset": 1714,
+      "length": 14,
+      "value": "\"AmwalAuthFramework.PasskeyManager\""
+    },
+    {
+      "filePath": "\/Users\/samehgalal\/Developer\/amwal-auth-ios\/AmwalAuthFramework\/AmwalAuthClient.swift",
+      "kind": "StringLiteral",
+      "offset": 75,
+      "length": 15,
+      "value": "\"AmwalAuthFramework.AmwalAuthClient\""
+    }
+  ]
+}

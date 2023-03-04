@@ -8,7 +8,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.5.3'
+    classpath 'com.android.tools.build:gradle:3.5.4'
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -132,9 +132,11 @@ def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
     //noinspection GradleDynamicVersion
+  implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "com.google.android.gms:play-services-fido:+"
+  implementation "com.google.android.gms:play-services-fido:19.0.1"
+  implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 // From node_modules
 }
 

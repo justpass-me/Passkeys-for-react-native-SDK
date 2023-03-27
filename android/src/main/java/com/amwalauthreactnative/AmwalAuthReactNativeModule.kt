@@ -2,12 +2,12 @@ package com.amwalauthreactnative
 
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.modules.network.OkHttpClientProvider
-import com.facebook.react.modules.network.ReactCookieJarContainer
 import kotlinx.coroutines.launch
 import tech.amwal.auth.android.AndroidAuth
 
@@ -38,8 +38,8 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
       ).apply {
         (it as ComponentActivity).lifecycleScope.launch {
           try {
-            register()
-            promise.resolve(Unit)
+            val result = Arguments.makeNativeMap(register())
+            promise.resolve(result)
           } catch (e: Exception) {
             e.printStackTrace()
             promise.reject(e)
@@ -69,8 +69,8 @@ class AmwalAuthReactNativeModule(private val reactContext: ReactApplicationConte
       ).apply {
         (it as ComponentActivity).lifecycleScope.launch {
           try {
-            auth()
-            promise.resolve(Unit)
+            val result = Arguments.makeNativeMap(auth())
+            promise.resolve(result)
           } catch (e: Exception) {
             e.printStackTrace()
             promise.reject(e)

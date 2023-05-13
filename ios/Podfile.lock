@@ -1,0 +1,16 @@
+PODS:
+  - justpass-me (0.1.1)
+
+DEPENDENCIES:
+  - justpass-me
+
+SPEC REPOS:
+  trunk:
+    - justpass-me
+
+SPEC CHECKSUMS:
+  justpass-me: 952d5fce56d986a7a4b5d7af099d1f8618887ad9
+
+PODFILE CHECKSUM: 0c9f602bf01be50f0d453e8489bcfeac192d0bc2
+
+COCOAPODS: 1.12.0

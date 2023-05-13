@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '.';
 
 import ResponsiveScrollView from '../../components/ResponsiveScrollView';
-import { authenticate } from 'justpass-me-react-native';
+import { authenticate } from '@justpass-me/justpass-me-react-native';
 
 import {
   Box,

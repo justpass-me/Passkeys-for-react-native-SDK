@@ -15,7 +15,7 @@ pod install
 ## Usage
 
 ```typescript
-import {register, authenticate} from 'justpass-me-react-native'
+import {register, authenticate} from '@justpass-me/justpass-me-react-native'
 
 const firebaseProjectName = "my-firebase-project" // the firebase project where the extension is installed
 const cloudLocation = "us-central1" // location where the extension is installed

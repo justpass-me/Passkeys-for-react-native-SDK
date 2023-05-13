@@ -797,7 +797,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.71.7)
   - hermes-engine/Pre-built (0.71.7)
   - justpass-me (0.1.1)
-  - justpass-me-react-native (0.1.0):
+  - justpass-me-react-native (0.1.3):
     - justpass-me (>= 0.1.1)
     - React-Core
   - leveldb-library (1.22.2)
@@ -1449,7 +1449,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   hermes-engine: 4438d2b8bf8bebaba1b1ac0451160bab59e491f8
   justpass-me: 952d5fce56d986a7a4b5d7af099d1f8618887ad9
-  justpass-me-react-native: 790bbe750f7710923a5c802a9e81f577e37827e9
+  justpass-me-react-native: 168c1094d7b26db9a3078368bfe17740703a086c
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378

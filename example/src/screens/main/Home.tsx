@@ -12,7 +12,7 @@ import type { CompositeScreenProps } from '@react-navigation/native';
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import type { StackScreenProps } from '@react-navigation/stack';
 import ProgcessingAlert from '../../components/ProcessingAlert';
-import { register } from 'justpass-me-react-native';
+import { register } from '@justpass-me/justpass-me-react-native';
 import { REGISTER_URL } from '../../config';
 import { Alert } from 'react-native';
 

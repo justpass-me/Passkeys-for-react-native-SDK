@@ -12,6 +12,7 @@ export interface RootState {
 const mapStateToProps = (state: RootState) => ({
   currentUser: state.userState.currentUser,
   userData: state.userState.userData,
+  autoSignIn: state.userState.autoSignIn,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({

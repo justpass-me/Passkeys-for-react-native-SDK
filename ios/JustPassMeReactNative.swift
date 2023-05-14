@@ -17,6 +17,23 @@ class JustPassMeReactNative: NSObject {
   @objc public func constantsToExport() -> [AnyHashable : Any] {
     return ["isAvailable": true];
   }
+
+  func handleJustPassMeClientError(_ error: Error, reject: RCTPromiseRejectBlock) {
+    let customError = error as? JustPassMeClient.JustPassMeClientError
+    switch customError {
+    case .badURL:
+        reject("JustPassMe", "Bad URL", error)
+    case .badResponse:
+        reject("JustPassMe", "Bad response", error)
+    case .noPublicKey:
+        reject("JustPassMe", "No public key", error)
+    case .runtimeError(let errorMessage):
+        reject("JustPassMe", errorMessage, error)
+    case .none:
+        let nsError = error as NSError
+        reject("JustPassMe", nsError.localizedDescription, nsError)
+    }
+  }
   
   @objc public func startRegistration(_
     registrationURL: String,
@@ -32,7 +49,7 @@ class JustPassMeReactNative: NSObject {
                                 extraClientHeaders: swiftDict);
             resolve(result)
           } catch {
-            reject("JustPassMe",error.localizedDescription, error)
+            handleJustPassMeClientError(error, reject: reject)
           }
       }
   }
@@ -51,7 +68,7 @@ class JustPassMeReactNative: NSObject {
                                 extraClientHeaders: swiftDict);
             resolve(result)
           } catch {
-            reject("JustPassMe",error.localizedDescription, error)
+            handleJustPassMeClientError(error, reject: reject)
           }
       }
   }

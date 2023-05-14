@@ -10,6 +10,7 @@ export enum UserActions {
 export type UserState = {
   currentUser?: FirebaseAuthTypes.User;
   userData?: IUserData;
+  autoSignIn: boolean;
 };
 
 export type UserActionsDispatch = {
@@ -21,6 +22,7 @@ export type UserActionsDispatch = {
 const initialState: UserState = {
   currentUser: undefined,
   userData: undefined,
+  autoSignIn: true,
 };
 
 export const user = (state = initialState, action: UserActionsDispatch) => {
@@ -34,7 +36,10 @@ export const user = (state = initialState, action: UserActionsDispatch) => {
       };
 
     case UserActions.CLEAR_DATA:
-      return initialState;
+      return {
+        ...initialState,
+        autoSignIn: false,
+      };
 
     default:
       return state;

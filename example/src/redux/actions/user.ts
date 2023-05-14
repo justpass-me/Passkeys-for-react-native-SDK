@@ -17,6 +17,10 @@ export const fetchUser = () => async (dispatch: UserDispatchFunction) => {
   try {
     const { currentUser } = auth();
     if (currentUser) {
+      dispatch({
+        type: UserActions.USER_STATE_CHANGE,
+        updateUser: currentUser,
+      });
       const docRef = usersDataCollection.doc(currentUser.uid);
       const userDataSnapshot = await docRef.get();
       const userData = userDataSnapshot.exists

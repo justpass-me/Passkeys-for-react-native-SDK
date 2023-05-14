@@ -62,6 +62,34 @@ const Signin: React.FC<SignInProps> = (props: SignInProps) => {
     }
   };
 
+  React.useEffect(() => {
+    if (props.autoSignIn) {
+      passkeyLogin(false);
+    }
+  }, [props.autoSignIn]);
+
+  const passkeyLogin = async (showProcessingAlert: boolean = true) => {
+    try {
+      setProcessing(showProcessingAlert);
+      const result = await authenticate(AUTHENTICATE_URL);
+      if (result.token) {
+        await auth().signInWithCustomToken(result.token);
+        setSuccessful(showProcessingAlert);
+      }
+    } catch (err: any) {
+      console.log(err);
+      if (
+        err.message !==
+        'The operation couldn’t be completed. (com.apple.AuthenticationServices.AuthorizationError error 1001.)'
+      ) {
+        Alert.alert(err.message);
+        console.log(err);
+      }
+    } finally {
+      setProcessing(false);
+    }
+  };
+
   return (
     <ResponsiveScrollView>
       <Box flex={1} p="2" py="8" w="90%" mx="auto" alignItems="flex-start">
@@ -111,26 +139,7 @@ const Signin: React.FC<SignInProps> = (props: SignInProps) => {
           <FormControl isRequired>
             <Button
               mt="2"
-              onPress={async () => {
-                try {
-                  setProcessing(true);
-                  const result = await authenticate(AUTHENTICATE_URL);
-                  if (result.token) {
-                    await auth().signInWithCustomToken(result.token);
-                    setSuccessful(true);
-                  }
-                } catch (err: any) {
-                  console.log(err);
-                  if (
-                    err.message !==
-                    'The operation couldn’t be completed. (com.apple.AuthenticationServices.AuthorizationError error 1001.)'
-                  ) {
-                    Alert.alert(err.message);
-                  }
-                } finally {
-                  setProcessing(false);
-                }
-              }}
+              onPress={() => passkeyLogin()}
               startIcon={<Icon as={MaterialIcons} name="fingerprint" />}
             >
               Passkey Login

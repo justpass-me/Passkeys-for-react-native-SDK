@@ -61,18 +61,24 @@ const store = createStore(
 let persistor = persistStore(store);
 
 const RootSelector = (props: BankReduxProps) => {
+  const [initializing, setInitializing] = React.useState(true);
   // Handle user state changes
   React.useEffect(() => {
     const subscriber = auth().onAuthStateChanged(
       (user: FirebaseAuthTypes.User | null) => {
         console.log(user);
         props.user_actions.fetchUser();
+        setInitializing(false);
       }
     );
     return subscriber; // unsubscribe on unmount
   }, [props.user_actions]);
 
-  return props.currentUser ? <MainDrawerNavigator /> : <AuthStackNavigator />;
+  return initializing ? null : props.currentUser ? (
+    <MainDrawerNavigator />
+  ) : (
+    <AuthStackNavigator />
+  );
 };
 
 const BankRoot = connector(RootSelector);

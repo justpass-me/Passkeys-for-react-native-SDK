@@ -3,6 +3,7 @@ buildscript {
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['JustPassMeReactNative_kotlinVersion']
 
   repositories {
+    mavenLocal()
     gradlePluginPortal()
     google()
     mavenCentral()
@@ -60,6 +61,7 @@ android {
 }
 
 repositories {
+  mavenLocal()
   mavenCentral()
   google()
 
@@ -135,7 +137,15 @@ dependencies {
     //noinspection GradleDynamicVersion
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "com.facebook.react:react-native:+"
-  implementation("tech.amwal.justpassme:justpassme:0.1.0-beta05")
+  implementation("tech.amwal.justpassme:justpassme:0.1.0-beta06")
+  implementation(platform("com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.11"))
+  implementation("com.squareup.okhttp3:okhttp")
+  implementation("com.squareup.okhttp3:logging-interceptor")
+  implementation("com.squareup.okhttp3:okhttp-urlconnection")
+  implementation('com.squareup.okhttp3:okhttp-coroutines:5.0.0-alpha.11')
+  implementation("androidx.credentials:credentials:1.2.0-alpha04")
+
+
 // From node_modules
 }
 

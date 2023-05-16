@@ -103,6 +103,12 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+      resValue("string", "host", "http://firebase-demo.accounts.justpass.me/")
+      resValue("string", "asset_statements", """
+           [{
+             "include": "http://firebase-demo.accounts.justpass.me/.well-known/assetlinks.json"
+           }]
+        """)
     }
 
     splits {

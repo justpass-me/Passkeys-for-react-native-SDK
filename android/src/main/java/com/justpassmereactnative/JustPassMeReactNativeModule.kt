@@ -1,17 +1,16 @@
 package com.JustPassMeReactNative
 
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.bridge.WritableMap
 import tech.amwal.justpassme.AuthResponse
 import tech.amwal.justpassme.JustPassMe
 
 class JustPassMeReactNativeModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
-  private val justPassMe = JustPassMe(reactContext.applicationContext)
 
   override fun getName(): String {
     return NAME
@@ -31,12 +30,16 @@ class JustPassMeReactNativeModule(reactContext: ReactApplicationContext) :
     extraClientHeaders: ReadableMap?,
     promise: Promise
   ) {
-    justPassMe.register(
+    currentActivity?.let {
+      JustPassMe(activity = it)
+    }?.register(
       registrationURL,
       extraClientHeaders?.toHashMap() as? Map<String, String>? ?: emptyMap()
     ) {
       when (it) {
-        is AuthResponse.Success -> promise.resolve(it)
+        is AuthResponse.Success -> promise.resolve(Arguments.createMap().apply {
+          putString("token", it.token)
+        })
 
         is AuthResponse.Error -> promise.reject(it.error, it.error)
       }
@@ -50,12 +53,16 @@ class JustPassMeReactNativeModule(reactContext: ReactApplicationContext) :
     extraClientHeaders: ReadableMap?,
     promise: Promise
   ) {
-    justPassMe.auth(
+    currentActivity?.let {
+      JustPassMe(activity = it)
+    }?.auth(
       authenticationURL,
       extraClientHeaders?.toHashMap() as? Map<String, String>? ?: emptyMap()
     ) {
       when (it) {
-        is AuthResponse.Success -> promise.resolve(it.token)
+        is AuthResponse.Success -> promise.resolve(Arguments.createMap().apply {
+          putString("token", it.token)
+        })
 
         is AuthResponse.Error -> promise.reject(it.error, it.error)
       }

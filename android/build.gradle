@@ -135,7 +135,7 @@ dependencies {
     //noinspection GradleDynamicVersion
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "com.facebook.react:react-native:+"
-  implementation("tech.amwal.justpassme:justpassme:0.1.0-beta04")
+  implementation("tech.amwal.justpassme:justpassme:0.1.0-beta05")
 // From node_modules
 }
 

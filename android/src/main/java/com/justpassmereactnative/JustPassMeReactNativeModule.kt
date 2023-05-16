@@ -9,7 +9,7 @@ import tech.amwal.justpassme.JustPassMe
 
 class JustPassMeReactNativeModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
-  private val justPassMe = JustPassMe(reactContext.currentActivity!!)
+  private val justPassMe = JustPassMe(reactContext.applicationContext)
 
   override fun getName(): String {
     return NAME

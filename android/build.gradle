@@ -137,7 +137,7 @@ dependencies {
     //noinspection GradleDynamicVersion
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "com.facebook.react:react-native:+"
-  implementation("tech.amwal.justpassme:justpassme:1.0.0-beta02")
+  implementation("tech.amwal.justpassme:justpassme:1.0.0-beta05")
   implementation(platform("com.squareup.okhttp3:okhttp-bom:5.0.0-alpha.11"))
   implementation("com.squareup.okhttp3:okhttp")
   implementation("com.squareup.okhttp3:logging-interceptor")
